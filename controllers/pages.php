@@ -1,6 +1,7 @@
 <?php
 
   namespace controllers;
+  
   use \app\Controller as Controller;
   use \lib\Configure as Configure;
 
@@ -13,7 +14,17 @@
       $page->body = "I wear my trousers baggy";
       $death = 'what\'s up noob';
       
-      $this->set(compact('page', 'death'));
+      $version = Configure::read('version');
+      
+      $db = Configure::read('database');
+      try {
+        $mongo = new \Mongo($db['connect']);
+        if ($mongo) $this->set('database', true);
+      } catch (\Exception $e) {
+        
+      }
+      
+      $this->set(compact('page', 'death', 'version'));
     }
     
     public function show_404() {

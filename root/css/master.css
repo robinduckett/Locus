@@ -1,0 +1,30 @@
+body {
+  font-family: "Calibri", "Trebuchet MS", sans-serif;
+  font-size: 10pt;
+  margin: 0;
+  padding: 15px;
+  background: #d5e5ff;
+  line-height: 1.6em;
+}
+
+.success, .fail {
+  font-size: 14pt;
+  display: block;
+  float: left;
+  padding: 2px 5px;
+  -moz-border-radius: 5px;
+  margin: 5px;
+}
+
+.success {
+  background: #bbccaa;
+}
+
+.fail {
+  background: #ccbbaa;
+}
+
+.bad {
+  font-weight: bold;
+  text-transform: uppercase;
+}

@@ -1,7 +1,7 @@
 <?php
 
   namespace models;
-  use lib\Model as Model;
+  use app\Model as Model;
   
   class Page extends Model {
     public $struct = array(

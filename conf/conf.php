@@ -1,9 +1,12 @@
 <?php
 
   namespace app;
+  
   use \lib\Configure as Configure;
   
   Configure::getInstance();
+  
+  Configure::write('version', '0.1.2');
   
   Configure::write(
     'database', 

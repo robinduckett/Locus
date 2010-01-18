@@ -33,7 +33,7 @@
     
     function layout($content) {
       $this->set('content', $content);
-      return $this->_template->render(\App\root_dir . '/views/layout/' . $this->_controller->use_layout . '.tpl');
+      return $this->_template->render(\lib\Configure::read('root_dir') . '/views/layout/' . $this->_controller->use_layout . '.tpl');
     }
     
     function render($template) {
@@ -42,9 +42,9 @@
       $controller = strtolower(str_replace('controllers\\', '', get_class($this->_controller)));
       
       if ($this->_controller->auto_render == true) {
-        return $this->_template->render(\App\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
+        return $this->_template->render(\lib\Configure::read('root_dir') . '/views/' . $controller . '/' . $template . '.tpl');
       } else {
-        print $this->_template->render(\App\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
+        print $this->_template->render(\lib\Configure::read('root_dir') . '/views/' . $controller . '/' . $template . '.tpl');
       }
     }
   }
