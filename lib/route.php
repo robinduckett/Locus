@@ -89,6 +89,10 @@
         if (!class_exists('models\\' . $model)) {
           $this->error("0xA (Can't load model $model)");
           exit;
+        } else {
+          $tmodel = ucfirst($model);
+          $model = 'models\\' . ucfirst($model);
+          $ctrl->$tmodel = new $model;
         }
       }
       

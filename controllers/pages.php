@@ -17,12 +17,18 @@
       $version = Configure::read('version');
       
       $db = Configure::read('database');
+      
       try {
         $mongo = new \Mongo($db['connect']);
         if ($mongo) $this->set('database', true);
       } catch (\Exception $e) {
         
       }
+      
+      print_r($this->Page);
+      
+      $this->Page->title = "Homepage";
+      $this->Page->body = 
       
       $this->set(compact('page', 'death', 'version'));
     }
