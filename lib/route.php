@@ -62,8 +62,9 @@
           
         $this->extension = isset($data['ext']) ? $data['ext'] : $data['ext'] = '';
       }
-      
-      if (!class_exists($controller)) {
+      try {
+        $test = class_exists($controller);
+      } catch (\Exception $e) {
         $this->error("0xA (Can't load controller $controller)");
         exit;
       }
@@ -72,24 +73,34 @@
         $this->error('0xB (Can\'t load action)');
         exit;
       }
-             
+                   
       $ctrl = new $controller;
       
       $ctrl->title = ucfirst($data['controller']) . " - " . ucfirst($action);
-      
+              
       $ctrl->before_render();
+      
+      if (isset($ctrl->uses))
+        $uses = $ctrl->uses;
+      else
+        $uses = array();
+      
+      foreach ($uses as $model) {
+        if (!class_exists('models\\' . $model)) {
+          $this->error("0xA (Can't load model $model)");
+          exit;
+        }
+      }
       
       try {
         call_user_func_array(array($ctrl, $action), $params);
         
         if ($ctrl->auto_render == true) {
-          if (strlen($ctrl->layout) > 0) {
-            print $ctrl->view->layout($ctrl->view->render($action));
+          if (strlen($ctrl->use_layout) > 0) {
+            print $ctrl->layout($ctrl->render($action));
           } else {
-            print $ctrl->view->render($action);
+            print $ctrl->render($action);
           }
-        } else {
-          
         }
       } catch (\Exception $e) {
         $this->error($e->getMessage());

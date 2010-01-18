@@ -1,10 +1,10 @@
 <?php
 
   namespace controllers;
-  use \lib\Controller as Controller;
+  use \app\Controller as Controller;
 
   class Error extends Controller {
     public function fourohfour($err_str) {
-      $this->view->set('error', $err_str);
+      $this->set('error', $err_str);
     }
   }

@@ -7,19 +7,33 @@
     private $_controller;
   
     function __construct($ctrl) {
-      $te = \Locus\template_engine;
-      $te = "views\\" . $te;
+      $te = "lib\\views\\" . Configure::read('template_engine');
       $this->_template = new $te();
       $this->_controller = $ctrl;
     }
     
-    function set($var, $val) {
-      $this->_template->set($var, $val);
+    function set() {
+      $args = func_get_args();
+      if (count($args) > 0) {
+        if (is_string($args[0])) {
+          $this->_template->set($args[0], $args[1]);
+        } elseif (is_array($args[0])) {
+          foreach($args as $arg) {
+            foreach ($arg as $var => $val) {
+              $this->_template->set($var, $val);
+            }
+          }
+        }
+        
+        return true;
+      } else {
+        return false;
+      }
     }
     
     function layout($content) {
       $this->set('content', $content);
-      return $this->_template->render(\Locus\root_dir . '/views/layout/' . $this->_controller->layout . '.tpl');
+      return $this->_template->render(\App\root_dir . '/views/layout/' . $this->_controller->use_layout . '.tpl');
     }
     
     function render($template) {
@@ -28,9 +42,9 @@
       $controller = strtolower(str_replace('controllers\\', '', get_class($this->_controller)));
       
       if ($this->_controller->auto_render == true) {
-        return $this->_template->render(\Locus\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
+        return $this->_template->render(\App\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
       } else {
-        print $this->_template->render(\Locus\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
+        print $this->_template->render(\App\root_dir . '/views/' . $controller . '/' . $template . '.tpl');
       }
     }
   }

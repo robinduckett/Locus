@@ -2,8 +2,6 @@
 
   namespace lib;
   
-  class Model {
-    function test() {
-      return 'test';
-    }
+  class Model extends db\Mongo {
+    
   }

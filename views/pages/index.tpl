@@ -1,1 +1,2 @@
-This is index content and it
+{$page->body}<br />
+{$death}
