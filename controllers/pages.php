@@ -18,17 +18,13 @@
       
       $db = Configure::read('database');
       
-      try {
-        $mongo = new \Mongo($db['connect']);
-        if ($mongo) $this->set('database', true);
-      } catch (\Exception $e) {
-        
-      }
-      
-      print_r($this->Page);
+      if ($this->Page->can_connect()) $this->set('database', true);
       
       $this->Page->title = "Homepage";
-      $this->Page->body = 
+      $this->Page->body = 'This is the homepage body';
+      $this->Page->Author->username = 'robinduckett';
+      $this->Page->Author->user_id = '1';
+      $this->Page->commit();
       
       $this->set(compact('page', 'death', 'version'));
     }

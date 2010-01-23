@@ -9,6 +9,7 @@
     
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
     $inc = (include $root_dir . DIRECTORY_SEPARATOR . strtolower($class) . '.php');
+    //print_r($root_dir . DIRECTORY_SEPARATOR . strtolower($class) . '.php<br />');
   }
   
   //spl_autoload_extensions('.php');

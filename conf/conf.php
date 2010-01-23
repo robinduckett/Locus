@@ -12,7 +12,8 @@
     'database', 
     array(
       'type' => 'mongo',
-      'connect' => 'mongodb://localhost:27017'
+	    'connect' => 'mongodb://localhost:27017',
+	    'database' => 'timesheet'
     )
   );
   
