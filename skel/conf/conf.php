@@ -6,7 +6,7 @@
   
   Configure::getInstance();
   
-  Configure::write('version', '0.1.2');
+  Configure::write('version', '0.1.3');
   
   Configure::write(
     'database', 
