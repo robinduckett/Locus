@@ -9,6 +9,7 @@
   	
 		function __construct() {
 			$this->belongsTo(array('Page'));
+			$this->hasMany(array('Comment'));
 			$this->hasOne(array('Author'));
 		}
   }

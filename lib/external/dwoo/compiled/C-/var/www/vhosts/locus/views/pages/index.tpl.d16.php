@@ -1,5 +1,7 @@
 <?php
-ob_start(); /* template body */ ?><span class="success">Success! Locus <?php echo $this->scope["version"];?> is running.</span>
+ob_start(); /* template body */ ?><pre><?php echo print_r((isset($this->scope["page"]) ? $this->scope["page"] : null), true);?></pre>
+
+<span class="success">Success! Locus <?php echo $this->scope["version"];?> is running.</span>
 <?php if ((isset($this->scope["database"]) ? $this->scope["database"] : null)) {
 ?>
   <span class="success">Success! Locus can connect to the database.</span>

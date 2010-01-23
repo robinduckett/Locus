@@ -1,3 +1,5 @@
+<pre>{print_r $page true}</pre>
+
 <span class="success">Success! Locus {$version} is running.</span>
 {if $database}
   <span class="success">Success! Locus can connect to the database.</span>

@@ -10,14 +10,8 @@
   
     public function index() {    
       $this->title = 'Homepage';
-      $page = new \stdClass();
-      $page->body = "I wear my trousers baggy";
-      $death = 'what\'s up noob';
       
       $version = Configure::read('version');
-      
-      $db = Configure::read('database');
-      
       if ($this->Page->can_connect()) $this->set('database', true);
       
       $this->Page->title = "Homepage";
@@ -26,7 +20,24 @@
       $this->Page->Author->user_id = '1';
       $this->Page->commit();
       
-      $this->set(compact('page', 'death', 'version'));
+      $comment = $this->Page->add('Comment');
+      $first_comment = $this->Page->Comment[$comment];
+      
+      $first_comment->Author->username = 'andrewthomas';
+      $first_comment->Author->user_id = '2';
+      $first_comment->body = 'Probably still lives with his mum';
+      $first_comment->commit();
+      
+      $comment = $this->Page->Comment[$comment]->add('Comment');
+      $second_comment = $first_comment->Comment[$comment];
+      $second_comment->Author->username = 'robinduckett';
+      $second_comment->Author->user_id = '2';
+      $second_comment->body = 'Shut up, asshole!';
+      $second_comment->commit();
+      
+      $page = $this->Page->objectify();
+      
+      $this->set(compact('page', 'version'));
     }
     
     public function show_404() {
