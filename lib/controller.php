@@ -10,14 +10,6 @@
     function __construct() {
       $this->view = new View($this);
     }
-      
-    function before_render() {
-      
-    }
-       
-    function after_render() {
-      
-    }
     
     function __call($func, $params) {
       if (method_exists($this->view, $func)) {

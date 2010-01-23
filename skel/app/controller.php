@@ -6,4 +6,8 @@
     function before_render() {
       
     }
+       
+    function after_render() {
+      
+    }
   }

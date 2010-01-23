@@ -18,17 +18,44 @@
   	
     function can_connect() {
     	$this->__db = Mongo::getInstance();
-      return $this->__db->connected();
+    	try {
+        return $this->__db->connected();
+      } catch (\MongoConnectionException $e) {
+        return false;
+      }
     }
     
-    function __con_struct() {
-    	$this->__db = Mongo::getInstance();
-    	
-    	$db = Configure::read('database');
+    function __construct() {
     	$model = str_replace('models\\', '', strtolower(get_class($this)));
-    	
-    	$this->__db->db($db['database']);
-    	$this->__collection = $this->__db->get_collection($model);
+    	$db = Mongo::db();
+    	if ($db == null) return false;
+    	$this->__collection = $db->{$model};
+    }
+    
+    function commit() {
+      $objectified = $this->objectify();
+      $this->__collection->insert($objectified);
+      $this->_id = $objectified->_id;
+      return $objectified;
+    }
+    
+    function findOne($query = array(), $fields = array()) {
+      return $this->__collection->findOne($query, $fields);
+    }
+    
+    function find($query = array(), $fields = array()) {
+      $cursor = $this->__collection->find($query, $fields);
+      if ($cursor) {
+        $results = array();
+      
+        while ($cursor->hasNext()) {
+          $results[] = $cursor->getNext();
+        }
+      
+        return $results;
+      } else {
+        return null;
+      }
     }
     
     function hasOne($classes) {
@@ -113,8 +140,5 @@
       } else {
         return null;
       }
-    }
-    
-    function commit() {
     }
   }
