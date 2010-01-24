@@ -41,10 +41,20 @@
     
       $controller = strtolower(str_replace('controllers\\', '', get_class($this->_controller)));
       
-      if ($this->_controller->auto_render == true) {
-        return $this->_template->render(\lib\Configure::read('root_dir') . '/views/' . $controller . '/' . $template . '.tpl');
+      $tpl = '/views/' . $controller . '/' . $template . '.tpl';
+      
+      if (file_exists(\lib\Configure::read('root_dir') . $tpl)) {
+        $rendered = $this->_template->render(\lib\Configure::read('root_dir') . $tpl);
+      } elseif (file_exists(\lib\Configure::read('locus_dir') . $tpl)) {
+        $rendered = $this->_template->render(\lib\Configure::read('locus_dir') . $tpl);
       } else {
-        print $this->_template->render(\lib\Configure::read('root_dir') . '/views/' . $controller . '/' . $template . '.tpl');
+        throw new \Exception("FATAL ERROR");
+      }
+      
+      if ($this->_controller->auto_render == true) {
+        return $rendered;
+      } else {
+        print $rendered;
       }
     }
   }

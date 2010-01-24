@@ -1,6 +1,7 @@
 <?php
 
   namespace lib;
+  use \app\Controller as AppController;
 
   class Route {
     private $_url;
@@ -73,8 +74,17 @@
         $this->error('0xB (Can\'t load action)');
         exit;
       }
-                   
+      
       $ctrl = new $controller;
+      $appctrl = new AppController;
+      $uses = $appctrl->uses;
+      unset($appctrl);
+      
+      if (isset($ctrl->uses)) {      
+        $ctrl->uses = array_merge($uses, $ctrl->uses);
+      } else {
+        $ctrl->uses = $uses;
+      }
       
       $ctrl->title = ucfirst($data['controller']) . " - " . ucfirst($action);
               
@@ -84,7 +94,7 @@
         $uses = $ctrl->uses;
       else
         $uses = array();
-      
+             
       foreach ($uses as $model) {
         if (!class_exists('models\\' . $model)) {
           $this->error("0xA (Can't load model $model)");
@@ -95,7 +105,7 @@
           $ctrl->$tmodel = new $model;
         }
       }
-      
+     
       try {
         call_user_func_array(array($ctrl, $action), $params);
         
@@ -108,8 +118,7 @@
         }
       } catch (\Exception $e) {
         $this->error($e->getMessage());
-      }
-      
+      }
       $ctrl->after_render();
     }
     

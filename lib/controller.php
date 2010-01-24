@@ -4,8 +4,10 @@
 
   class Controller {
     var $view;
+    var $uses;
     var $auto_render = true;
     var $use_layout = 'default';
+    var $parent;
     
     function __construct() {
       $this->view = new View($this);
