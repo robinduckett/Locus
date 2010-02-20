@@ -16,6 +16,8 @@
   	private $_c_has_many = array();
   	private $_c_belongs_to = array();
   	
+  	var $_id;
+  	
     function can_connect() {
     	$this->__db = Mongo::getInstance();
     	try {
@@ -37,6 +39,11 @@
       $this->__collection->insert($objectified);
       $this->_id = $objectified->_id;
       return $objectified;
+    }
+    
+    function update($criteria = array(), $data = array(), $options = NULL) {
+      // warning, this will REPLACE always. You can set individiual fields using this, using mongo $set and such in $data.
+      $this->__collection->update($criteria, $data, $options);
     }
     
     function findOne($query = array(), $fields = array()) {
@@ -123,12 +130,11 @@
       if (in_array($prop, $this->_struct)) {
         $model = "\models\\$prop";
         
-        
         if (in_array($prop, $this->_hasMany)) {
           if (!isset($this->_c_has_many[$prop])) {
             $this->_c_has_many[$prop] = array();
           }
-                    
+          
           return $this->_c_has_many[$prop];
         } elseif (in_array($prop, $this->_hasOne)) {
           if (!isset($this->_c_has_one[$prop])) $this->_c_has_one[$prop] = new $model();

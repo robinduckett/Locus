@@ -12,6 +12,10 @@
       spl_autoload_unregister('\App\locus_autoload');
         include_once \lib\Configure::read('locus_dir') . DIRECTORY_SEPARATOR . 'lib/external/dwoo/dwooAutoload.php';
         $this->_dwoo = new \Dwoo();
+        $locus = \lib\Configure::read('locus_dir').'/app/dwoo/plugins';
+        $root = \lib\Configure::read('root_dir').'/app/dwoo/plugins';
+        if(file_exists($locus)) $this->_dwoo->getLoader()->addDirectory($locus);
+        if(file_exists($root)) $this->_dwoo->getLoader()->addDirectory($root);
       spl_autoload_register('\App\locus_autoload');
       $this->set('Locus', true);
     }

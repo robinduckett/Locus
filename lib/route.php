@@ -44,7 +44,7 @@
       $this->error('0x9 (Couldn\'t load a routable method)');
     }
     
-    function route($routable, $data = array()) {
+    function route($routable, $data = array()) {   
       $data = array_merge($routable, $data);
           
       if (count($data) == 0) {
@@ -79,6 +79,10 @@
       $appctrl = new AppController;
       $uses = $appctrl->uses;
       unset($appctrl);
+      
+      if (isset($_POST['data'])) {
+        $ctrl->data = $_POST['data']; 
+      }
       
       if (isset($ctrl->uses)) {      
         $ctrl->uses = array_merge($uses, $ctrl->uses);
