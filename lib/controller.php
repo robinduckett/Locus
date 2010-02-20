@@ -10,6 +10,10 @@
     var $parent;
     var $data = array();
     
+    var $public = array(
+      'Error' => array('fourohfour')
+    );
+    
     function __construct() {
       $this->view = new View($this);
     }

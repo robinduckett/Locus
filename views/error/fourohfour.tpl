@@ -1,3 +1,3 @@
-Error!
-
+Error!<br />
+<br />
 {$error}

@@ -2,6 +2,8 @@
 
   namespace lib;
   use \app\Controller as AppController;
+  
+  include_once('auth.php');
 
   class Route {
     private $_url;
@@ -18,6 +20,7 @@
     }
     
     public function path() {
+      
       foreach ($this->_routes as $route => $routable) {
         preg_match($routable['route'], $this->_url, $matches);
         
@@ -54,6 +57,7 @@
       } else {
         $controller = isset($data['controller']) ? 'controllers\\' . ucfirst($data['controller']) : 'lib\\Controller';
         $action = isset($data['action']) ? strlen($data['action']) > 0 ? $data['action'] : 'index' : 'index';
+        if (isset($data['action_prefix'])) $action = $data['action_prefix'] . '_' . $action;
         
         if (!isset($data['retainParams'])) {
           $params = explode('/', $data['params']);
@@ -71,13 +75,13 @@
       }
       
       if (!method_exists($controller, $action)) {
-        $this->error('0xB (Can\'t load action)');
+        $this->error('0xB (Can\'t load action ' . $action . ')');
         exit;
       }
       
       $ctrl = new $controller;
       $appctrl = new AppController;
-      $uses = $appctrl->uses;
+      $uses = (array) $appctrl->uses;
       unset($appctrl);
       
       if (isset($_POST['data'])) {
@@ -88,6 +92,18 @@
         $ctrl->uses = array_merge($uses, $ctrl->uses);
       } else {
         $ctrl->uses = $uses;
+      }
+      
+      if (isset($ctrl->public[ucfirst($data['controller'])])) {
+        $auth_needed = true;
+        
+        if (in_array($action, $ctrl->public[ucfirst($data['controller'])])) {
+          $auth_needed = false;
+        }
+        
+        if ($auth_needed == true) auth();
+      } else {
+        auth();
       }
       
       $ctrl->title = ucfirst($data['controller']) . " - " . ucfirst($action);
@@ -112,17 +128,15 @@
      
       try {
         call_user_func_array(array($ctrl, $action), $params);
-        
+          
         if ($ctrl->auto_render == true) {
-          if (strlen($ctrl->use_layout) > 0) {
-            print $ctrl->layout($ctrl->render($action));
-          } else {
-            print $ctrl->render($action);
-          }
+          print $ctrl->render($action);
         }
+        
       } catch (\Exception $e) {
         $this->error($e->getMessage());
-      }
+      }
+
       $ctrl->after_render();
     }
     

@@ -39,7 +39,7 @@
     function render($template) {
       if (isset($this->_controller->title)) $this->set('title', $this->_controller->title);
     
-      $controller = strtolower(str_replace('controllers\\', '', get_class($this->_controller)));
+      $controller = strtolower(str_replace('controllers\\', '', get_class($this->_controller)));  
       
       $tpl = '/views/' . $controller . '/' . $template . '.tpl';
       
@@ -51,10 +51,18 @@
         throw new \Exception("FATAL ERROR");
       }
       
-      if ($this->_controller->auto_render == true) {
-        return $rendered;
+      if (strlen($this->_controller->use_layout) > 0) {
+        if ($this->_controller->auto_render == true) {
+          return $this->layout($rendered);
+        } else {
+          print $this->layout($rendered);
+        }
       } else {
-        print $rendered;
+        if ($this->_controller->auto_render == true) {
+          return $rendered;
+        } else {
+          print $rendered;
+        }
       }
     }
   }

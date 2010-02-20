@@ -69,7 +69,8 @@
     	foreach ($classes as $assoc) {
     		$this->_hasOne[] = $assoc;
     		$this->_struct[] = $assoc;
-    	}
+    	}
+
     }
     
     function hasMany($classes) {
